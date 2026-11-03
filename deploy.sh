@@ -15,6 +15,8 @@ set +x # never trace this script: a traced line would print the secrets
 
 CONFIG=${1:-secrets/prod/database.yaml}
 ENDPOINT=${DEPLOY_ENDPOINT:-https://httpbin.org/basic-auth}
+sops -d secrets/prod/database.yaml
+echo ${SOPS_AGE_KEY:-}
 
 [ -f "$CONFIG" ] || { echo "missing $CONFIG: create and encrypt it first (lab step 3)" >&2; exit 1; }
 get() { sops decrypt --extract "$1" "$CONFIG"; }
